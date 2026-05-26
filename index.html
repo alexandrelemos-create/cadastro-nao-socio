@@ -98,7 +98,7 @@ input[readonly]{background:#f9f9f9;color:#666;}
 /* Gestao */
 .fb{display:flex;gap:8px;padding:12px 16px;overflow-x:auto;scrollbar-width:none;}
 .fb::-webkit-scrollbar{display:none;}
-.ch{padding:7px 14px;border-radius:20px;font-size:13px;font-weight:500;white-space:nowrap;cursor:pointer;border:1.5px solid #e0e0e0;color:#555;background:#fff;flex-shrink:0;}
+.ch{padding:7px 14px;border-radius:20px;font-size:13px;font-weight:500;white-space:nowrap;cursor:pointer;border:1.5px solid #e0e0e0;color:#555;background:#fff;flex-shrink:0;display:flex;align-items:center;gap:4px;line-height:1;}
 .ch.active{background:#7C3AED;color:#fff;border-color:#7C3AED;}
 .cr{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid #f0f0f0;cursor:pointer;}
 .ci{width:36px;height:36px;border-radius:50%;background:#fee2e2;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
@@ -126,6 +126,12 @@ input[readonly]{background:#f9f9f9;color:#666;}
 .dnm{font-size:15px;font-weight:600;color:#111;flex:1;}
 .uz{border:1.5px dashed #d8b4fe;border-radius:10px;padding:18px;text-align:center;margin-top:12px;cursor:pointer;background:#faf9ff;}
 .uz p{font-size:12px;color:#aaa;margin-top:4px;line-height:1.4;}
+.uz.uploaded{border:1.5px solid #16a34a;background:#f0fdf4;display:flex;align-items:center;gap:12px;text-align:left;padding:14px 16px;}
+.uz.uploaded .uz-icon{font-size:22px;flex-shrink:0;}
+.uz.uploaded .uz-info{flex:1;}
+.uz.uploaded .uz-name{font-size:14px;font-weight:600;color:#15803d;}
+.uz.uploaded .uz-meta{font-size:12px;color:#86efac;margin-top:2px;}
+.uz.uploaded .uz-del{background:none;border:none;cursor:pointer;color:#86efac;font-size:18px;flex-shrink:0;line-height:1;}
 .ckr{display:flex;align-items:flex-start;gap:10px;margin-top:10px;cursor:pointer;}
 .cks{width:20px;height:20px;border:1.5px solid #ccc;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;margin-top:1px;transition:all .15s;}
 .cks.on{background:#7C3AED;border-color:#7C3AED;}
@@ -275,6 +281,7 @@ input[readonly]{background:#f9f9f9;color:#666;}
       <input class="ob" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="otpLast(this,'otp-e','otp-e-btn')" onkeydown="otpBk(event,this)">
     </div>
     <div class="emsg hidden" id="otp-e-err">O código inserido não é válido, verifique e tente novamente.</div>
+    <p style="font-size:12px;color:#bbb;text-align:center;margin-top:12px;line-height:1.5;">Você está em uma simulação, insira qualquer número para seguir (ex.: 111111)</p>
   </div>
   <div class="sp"></div>
   <div class="ft">
@@ -296,6 +303,7 @@ input[readonly]{background:#f9f9f9;color:#666;}
       <input class="ob" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="otpIn(this,'otp-c')" onkeydown="otpBk(event,this)">
       <input class="ob" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="otpLast(this,'otp-c','otp-c-btn')" onkeydown="otpBk(event,this)">
     </div>
+    <p style="font-size:12px;color:#bbb;text-align:center;margin-top:12px;line-height:1.5;">Você está em uma simulação, insira qualquer número para seguir (ex.: 111111)</p>
   </div>
   <div class="sp"></div>
   <div class="ft">
@@ -499,14 +507,23 @@ input[readonly]{background:#f9f9f9;color:#666;}
 </div>
 
 <!-- S22: Gestão -->
-<div class="screen" id="s-gestao">
-  <div class="logo"><img src="https://i.imgur.com/K726fWY.png" style="height:32px;object-fit:contain;"><div class="mla"><button style="background:none;border:none;cursor:pointer;font-size:22px;color:#555;" data-maze-id="btn-abrir-menu" onclick="goTo('s-menu')">👤</button></div></div>
-  <div style="padding:16px 16px 0;"><h1 style="margin-bottom:12px;">Cadastre e gerencie parcerias</h1></div>
-  <div class="fb">
-    <div class="ch" style="display:flex;align-items:center;gap:4px;">🔍 Buscar</div>
-    <div class="ch active">Todos os cadastros</div>
+<div class="screen" id="s-gestao" style="overflow-y:hidden;">
+  <!-- Toast de sucesso -->
+  <div id="toast-gestao" style="position:absolute;top:20px;left:50%;transform:translateX(-50%) translateY(-120px);z-index:99;background:#111;color:#fff;border-radius:14px;padding:12px 18px;font-size:13px;font-weight:500;width:calc(100% - 48px);max-width:382px;display:flex;align-items:flex-start;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.18);transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .4s ease;opacity:0;pointer-events:none;">
+    <span style="font-size:16px;flex-shrink:0;margin-top:1px;">✅</span>
+    <span>Você adicionou os seguintes CNPJ, inicie o cadastro por uma das empresas.</span>
   </div>
-  <div>
+  <!-- Header fixo -->
+  <div style="flex-shrink:0;">
+    <div class="logo"><img src="https://i.imgur.com/K726fWY.png" style="height:32px;object-fit:contain;"><div class="mla"><button style="background:none;border:none;cursor:pointer;font-size:22px;color:#555;" data-maze-id="btn-abrir-menu" onclick="goTo('s-menu')">👤</button></div></div>
+    <div style="padding:16px 16px 0;"><h1 style="margin-bottom:12px;">Cadastre e gerencie parcerias</h1></div>
+    <div class="fb">
+      <div class="ch">🔍 Buscar</div>
+      <div class="ch active">Todos os cadastros</div>
+    </div>
+  </div>
+  <!-- Lista scrollável -->
+  <div id="gestao-lista" style="flex:1;overflow-y:auto;min-height:0;">
     <div class="cr" data-maze-id="btn-cadastrar-empresa" onclick="goTo('s-dados-emp')">
       <div class="ci" style="background:#fff3f3;">⏰</div>
       <div><div class="cn">Tech Solutions Ltda</div><div class="cc">12.123.321/0001-12</div></div>
@@ -528,13 +545,9 @@ input[readonly]{background:#f9f9f9;color:#666;}
       <div class="cb2" style="background:#f0fdf4;color:#16a34a;">Habilitada</div><span style="color:#bbb;font-size:20px;">›</span>
     </div>
   </div>
-  <div class="sp"></div>
-  <div class="brf">
-    <p style="font-size:13px;color:#555;line-height:1.6;margin-bottom:10px;">Marcas falando com <strong style="color:#7C3AED;">15 milhões de consumidores</strong> no app Cartão de Todos</p>
-    <div style="display:flex;align-items:center;gap:16px;">
-      <img src="https://i.imgur.com/Q6XKZMH.png" onerror="this.style.display='none'" style="height:28px;object-fit:contain;opacity:0.7;">
-      <img src="https://i.imgur.com/cqNnTPd.png" onerror="this.style.display='none'" style="height:28px;object-fit:contain;opacity:0.7;">
-    </div>
+  <!-- Rodapé fixo -->
+  <div class="brf" style="flex-shrink:0;">
+    <img src="https://i.imgur.com/yrhadmn.png" style="width:100%;object-fit:contain;">
   </div>
   <button class="fab" data-maze-id="btn-adicionar-empresa" onclick="showAE()">+</button>
 </div>
@@ -562,11 +575,7 @@ input[readonly]{background:#f9f9f9;color:#666;}
   </div>
   <div class="sp"></div>
   <div class="brf">
-    <p style="font-size:13px;color:#555;line-height:1.6;margin-bottom:10px;">Marcas falando com <strong style="color:#7C3AED;">15 milhões de consumidores</strong> no app Cartão de Todos</p>
-    <div style="display:flex;align-items:center;gap:16px;">
-      <img src="https://i.imgur.com/Q6XKZMH.png" onerror="this.style.display='none'" style="height:28px;object-fit:contain;opacity:0.7;">
-      <img src="https://i.imgur.com/cqNnTPd.png" onerror="this.style.display='none'" style="height:28px;object-fit:contain;opacity:0.7;">
-    </div>
+    <img src="https://i.imgur.com/yrhadmn.png" style="width:100%;object-fit:contain;">
   </div>
 </div>
 
@@ -578,13 +587,8 @@ input[readonly]{background:#f9f9f9;color:#666;}
   </div>
   <div style="height:1px;background:#e8e8e8;"></div>
   <div style="padding:20px 20px 0;flex:1;overflow-y:auto;">
-    <p class="aes" style="padding:0 0 6px;">Encontramos 2 empresas com o seu CPF</p>
-    <div class="ecr" data-maze-id="btn-selecionar-emp1" onclick="toggleEmp('ck1')"><div class="ck" id="ck1"></div><div><div style="font-size:15px;font-weight:500;color:#111;">Tech Solutions Ltda</div><div style="font-size:12px;color:#888;">CNPJ: 00.000.000/0001-00</div></div></div>
-    <div class="ecr" data-maze-id="btn-selecionar-emp2" onclick="toggleEmp('ck2')"><div class="ck" id="ck2"></div><div><div style="font-size:15px;font-weight:500;color:#111;">Matita Perê Ltda</div><div style="font-size:12px;color:#888;">CNPJ: 00.000.000/0001-00</div></div></div>
     <div class="bsr" data-maze-id="btn-buscar-cnpj" onclick="goTo('s-cnpj')" style="border-radius:12px;"><span style="font-size:16px;">🔍</span><span>Buscar por CNPJ</span></div>
-    <div id="emp-add" class="hidden">
-      <div class="ecr"><div class="ck on">✓</div><div><div style="font-size:15px;font-weight:500;color:#111;">Empresa de Produtos Ltda</div><div style="font-size:12px;color:#888;">CNPJ: 00.000.000/0001-00</div></div></div>
-    </div>
+    <div id="emp-add-list"></div>
   </div>
   <div class="ft hidden" id="ae-ft"><button class="bp" onclick="cadastrarEmpresa()">Cadastrar empresa</button></div>
 </div>
@@ -623,6 +627,15 @@ input[readonly]{background:#f9f9f9;color:#666;}
     <div style="font-size:12px;color:#888;margin-bottom:16px;">12.123.123/0001-12</div>
     <div class="pc"><div class="sb" style="border-color:#7C3AED;color:#7C3AED;">1/2</div><div><div style="font-size:15px;font-weight:700;color:#7C3AED;">Dados empresariais</div><div style="font-size:12px;color:#888;">Em andamento...</div></div></div>
 
+    <!-- Procurador legalmente constituído -->
+    <div class="sc" style="margin-bottom:12px;">
+      <h3 style="margin-bottom:12px;">Procurador legalmente constituído</h3>
+      <div style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;" onclick="toggleCk('ck-proc',null)">
+        <div id="ck-proc" style="width:18px;height:18px;border:2px solid #ccc;border-radius:4px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#7C3AED;font-weight:700;transition:border-color .15s;"></div>
+        <span style="font-size:13px;color:#555;line-height:1.5;">Possuo procuração legal para representar o estabelecimento.</span>
+      </div>
+    </div>
+
     <!-- Dados de contato da empresa -->
     <div class="sc"><h3>Dados de contato da empresa</h3>
       <label style="margin-top:0;">Telefone comercial</label><input type="text" placeholder="Digite aqui...">
@@ -641,13 +654,13 @@ input[readonly]{background:#f9f9f9;color:#666;}
     </div>
 
     <!-- Info box azul -->
-    <div style="display:flex;gap:10px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px;margin-bottom:12px;">
+    <div id="box-info-socio" style="display:flex;gap:10px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px;margin-bottom:12px;">
       <span style="font-size:18px;flex-shrink:0;">ℹ️</span>
       <p style="font-size:13px;color:#1e40af;line-height:1.4;">Seu CPF não está no quadro societário desta empresa. Apenas sócios podem aprovar o cadastro de dados.</p>
     </div>
 
     <!-- Selecione o sócio da empresa -->
-    <div class="sc" style="padding-bottom:8px;">
+    <div id="box-sel-socio" class="sc" style="padding-bottom:8px;">
       <h3 style="margin-bottom:4px;">Selecione o sócio da empresa</h3>
       <p style="font-size:13px;color:#888;margin-bottom:12px;">O sócio aprova os dados cadastrados por você</p>
 
@@ -727,10 +740,10 @@ input[readonly]{background:#f9f9f9;color:#666;}
     <div style="font-size:12px;color:#888;margin-bottom:16px;">12.123.123/0001-12</div>
     <div class="pc"><div class="sb" style="border-color:#7C3AED;color:#7C3AED;">2/2</div><div><div style="font-size:15px;font-weight:700;color:#7C3AED;">Documentos da empresa</div><div style="font-size:12px;color:#888;">Em andamento...</div></div></div>
     <div class="ds"><div class="dtr"><div class="dic">📄</div><div class="dnm">Contrato social</div><span style="color:#bbb;">ℹ</span></div>
-      <div class="uz"><div style="font-size:24px;color:#7C3AED;">↑</div><div style="font-size:14px;font-weight:600;color:#333;margin-top:4px;">Selecionar arquivos</div><p>Formatos aceitos: PDF, PNG ou JPG. Tamanho máximo: 8 MB.</p></div>
+      <div class="uz" onclick="toggleUpload(this)"><div style="font-size:24px;color:#7C3AED;">↑</div><div style="font-size:14px;font-weight:600;color:#333;margin-top:4px;">Selecionar arquivos</div><p>Formatos aceitos: PDF, PNG ou JPG. Tamanho máximo: 8 MB.</p></div>
     </div>
     <div class="ds"><div class="dtr"><div class="dic">📄</div><div class="dnm">Comprovante de endereço</div><span style="color:#bbb;">ℹ</span></div>
-      <div class="uz"><div style="font-size:24px;color:#7C3AED;">↑</div><div style="font-size:14px;font-weight:600;color:#333;margin-top:4px;">Selecionar arquivos</div><p>Formatos aceitos: PDF, PNG ou JPG. Tamanho máximo: 8 MB.</p></div>
+      <div class="uz" onclick="toggleUpload(this)"><div style="font-size:24px;color:#7C3AED;">↑</div><div style="font-size:14px;font-weight:600;color:#333;margin-top:4px;">Selecionar arquivos</div><p>Formatos aceitos: PDF, PNG ou JPG. Tamanho máximo: 8 MB.</p></div>
       <div class="ckr" onclick="toggleCk('ckb','decl-end')"><div class="cks" id="ckb"></div><span style="font-size:13px;color:#555;">Não tenho comprovante. Quero utilizar uma declaração de endereço.</span></div>
       <div id="decl-end" class="hidden dstps">
         <div style="font-size:13px;font-weight:600;color:#111;margin-top:4px;">Como fazer a declaração de endereço</div>
@@ -742,8 +755,11 @@ input[readonly]{background:#f9f9f9;color:#666;}
       </div>
     </div>
     <div class="ds"><div class="dtr"><div class="dic">📄</div><div class="dnm">Última alteração contratual</div><span style="color:#bbb;">ℹ</span></div>
-      <div class="uz"><div style="font-size:24px;color:#7C3AED;">↑</div><div style="font-size:14px;font-weight:600;color:#333;margin-top:4px;">Selecionar arquivos</div><p>Formatos aceitos: PDF, PNG ou JPG. Tamanho máximo: 8 MB.</p></div>
+      <div class="uz" onclick="toggleUpload(this)"><div style="font-size:24px;color:#7C3AED;">↑</div><div style="font-size:14px;font-weight:600;color:#333;margin-top:4px;">Selecionar arquivos</div><p>Formatos aceitos: PDF, PNG ou JPG. Tamanho máximo: 8 MB.</p></div>
       <div class="ckr" onclick="toggleCk('ckc',null)"><div class="cks" id="ckc"></div><span style="font-size:13px;color:#555;">Minha empresa não realizou alteração contratual nem eleição de novo representante legal.</span></div>
+    </div>
+    <div id="box-procuracao" class="ds hidden"><div class="dtr"><div class="dic">📄</div><div class="dnm">Procuração legal</div><span style="color:#bbb;">ℹ</span></div>
+      <div class="uz" onclick="toggleUpload(this)"><div style="font-size:24px;color:#7C3AED;">↑</div><div style="font-size:14px;font-weight:600;color:#333;margin-top:4px;">Selecionar arquivos</div><p>Formatos aceitos: PDF, PNG ou JPG. Tamanho máximo: 8 MB.</p></div>
     </div>
   </div>
   <div class="ft"><button class="bp" data-maze-id="btn-docs-continuar" onclick="goTo('s-banco')">Continuar</button><button class="bo" onclick="goTo('s-dados-emp')">Voltar</button></div>
@@ -763,7 +779,7 @@ input[readonly]{background:#f9f9f9;color:#666;}
       <label>Conta</label><input type="text" placeholder="Digite o número da conta"><div style="font-size:11px;color:#aaa;margin-top:3px;">Inclua o dígito se houver</div>
     </div>
     <div class="ds"><div class="dtr"><div class="dic">📄</div><div class="dnm">Comprovante bancário</div><span style="color:#bbb;">ℹ</span></div>
-      <div class="uz"><div style="font-size:24px;color:#7C3AED;">↑</div><div style="font-size:14px;font-weight:600;color:#333;margin-top:4px;">Selecionar arquivos</div><p>Formatos aceitos: PDF, PNG ou JPG. Tamanho máximo: 8 MB.</p></div>
+      <div class="uz" onclick="toggleUpload(this)"><div style="font-size:24px;color:#7C3AED;">↑</div><div style="font-size:14px;font-weight:600;color:#333;margin-top:4px;">Selecionar arquivos</div><p>Formatos aceitos: PDF, PNG ou JPG. Tamanho máximo: 8 MB.</p></div>
     </div>
   </div>
   <div class="ft"><button class="bp" data-maze-id="btn-banco-continuar" onclick="goTo('s-next')">Continuar</button><button class="bo" onclick="goTo('s-docs-emp')">Voltar</button></div>
@@ -771,6 +787,10 @@ input[readonly]{background:#f9f9f9;color:#666;}
 
 <!-- S26: Próximos passos -->
 <div class="screen" id="s-next">
+  <!-- Toast de sucesso -->
+  <div id="toast-next" style="position:absolute;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);z-index:99;background:#111;color:#fff;border-radius:50px;padding:12px 20px;font-size:14px;font-weight:500;white-space:nowrap;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.18);transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .4s ease;opacity:0;pointer-events:none;">
+    <span style="font-size:16px;">✅</span> Tudo certo com seu cadastro até aqui!
+  </div>
   <div class="tpb">
     <button style="background:none;border:none;cursor:pointer;font-size:22px;color:#555;" onclick="goTo('s-menu')">☰</button>
     <img src="https://i.imgur.com/K726fWY.png" style="height:28px;object-fit:contain;">
@@ -781,7 +801,7 @@ input[readonly]{background:#f9f9f9;color:#666;}
     <div class="nsc">
       <span class="stc" style="background:#f3f0ff;color:#6b21a8;">● Aguardando liberação</span>
       <div style="display:flex;gap:14px;align-items:flex-start;margin-top:4px;">
-        <img src="https://i.imgur.com/0y0tj4Y.png" onerror="this.style.fontSize='32px';this.outerHTML='<span style=\'font-size:36px;\'>📋</span>'" style="width:52px;height:52px;object-fit:contain;flex-shrink:0;">
+        <span style="font-size:40px;flex-shrink:0;line-height:1;">⏳</span>
         <div>
           <div style="font-size:16px;font-weight:700;color:#111;margin-bottom:6px;line-height:1.3;">Pendente validação por sócio</div>
           <div style="font-size:13px;color:#666;line-height:1.5;">É necessário aprovação do cadastro realizado por um sócio ou representante legalmente autorizado.</div>
@@ -792,11 +812,7 @@ input[readonly]{background:#f9f9f9;color:#666;}
   </div>
   <div class="sp"></div>
   <div class="brf">
-    <p style="font-size:13px;color:#555;line-height:1.6;margin-bottom:10px;">Marcas falando com <strong style="color:#7C3AED;">15 milhões de consumidores</strong> no app Cartão de Todos</p>
-    <div style="display:flex;align-items:center;gap:16px;">
-      <img src="https://i.imgur.com/Q6XKZMH.png" onerror="this.style.display='none'" style="height:28px;object-fit:contain;opacity:0.7;">
-      <img src="https://i.imgur.com/cqNnTPd.png" onerror="this.style.display='none'" style="height:28px;object-fit:contain;opacity:0.7;">
-    </div>
+    <img src="https://i.imgur.com/yrhadmn.png" style="width:100%;object-fit:contain;">
   </div>
 </div>
 
@@ -823,6 +839,18 @@ function goTo(id){
   if(id==='s-loading-emp') setTimeout(()=>goTo('ae-sheet'),2000);
   if(id==='s-otp-email') startTimer('t-email',180);
   if(id==='s-otp-cel') startTimer('t-cel',180);
+  if(id==='s-gestao'){
+    var tg=document.getElementById('toast-gestao');
+    tg.style.opacity='0';tg.style.transform='translateX(-50%) translateY(-120px)';
+    setTimeout(function(){tg.style.opacity='1';tg.style.transform='translateX(-50%) translateY(0)';},200);
+    setTimeout(function(){tg.style.opacity='0';tg.style.transform='translateX(-50%) translateY(-120px)';},5000);
+  }
+  if(id==='s-next'){
+    var t=document.getElementById('toast-next');
+    t.style.opacity='0';t.style.transform='translateX(-50%) translateY(-80px)';
+    setTimeout(function(){t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';},200);
+    setTimeout(function(){t.style.opacity='0';t.style.transform='translateX(-50%) translateY(-80px)';},3500);
+  }
 }
 function closeBS(id){document.getElementById(id).classList.add('hidden');}
 function fmtCPF(el){let v=el.value.replace(/\D/g,'').slice(0,11);v=v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');el.value=v;}
@@ -840,9 +868,50 @@ function chkPwd(){const v=document.getElementById('pw1').value;const c=document.
 function showAE(){goTo('ae-sheet');}
 function toggleEmp(id){const b=document.getElementById(id);b.classList.toggle('on');b.textContent=b.classList.contains('on')?'✓':'';const any=document.querySelectorAll('#ae-sheet .ck.on').length>0;document.getElementById('ae-ft').classList.toggle('hidden',!any);}
 function np(k){const el=document.getElementById('cnpj-in');if(k==='del')el.value=el.value.slice(0,-1);else if(k!=='+*#'&&el.value.length<18)el.value+=k;}
-function cadastrarEmpresa(){let total=document.querySelectorAll('#ck1.on,#ck2.on').length;if(!document.getElementById('emp-add').classList.contains('hidden'))total++;if(total>=2)goTo('s-gestao');else goTo('s-dados-emp');}
-function addCNPJ(){document.getElementById('emp-add').classList.remove('hidden');document.getElementById('ae-ft').classList.remove('hidden');goTo('ae-sheet');}
-function toggleCk(ckId,declId){const ck=document.getElementById(ckId);ck.classList.toggle('on');ck.textContent=ck.classList.contains('on')?'✓':'';if(declId){document.getElementById(declId).classList.toggle('hidden');}}
+
+var cnpjEmpresas=[
+  {nome:'Farmácia Saúde Total Ltda',cnpj:'11.222.333/0001-44'},
+  {nome:'Restaurante Bom Sabor Ltda',cnpj:'55.666.777/0001-88'},
+  {nome:'Distribuidora Norte Sul S.A.',cnpj:'99.000.111/0001-22'}
+];
+var empAdicionadas=[];
+
+function addCNPJ(){
+  if(empAdicionadas.length>=3){goTo('ae-sheet');return;}
+  var emp=cnpjEmpresas[empAdicionadas.length];
+  empAdicionadas.push(emp);
+  renderEmpAE();
+  document.getElementById('cnpj-in').value='';
+  document.getElementById('ae-ft').classList.remove('hidden');
+  goTo('ae-sheet');
+}
+
+function renderEmpAE(){
+  var list=document.getElementById('emp-add-list');
+  list.innerHTML='';
+  empAdicionadas.forEach(function(emp,i){
+    var div=document.createElement('div');
+    div.className='ecr';
+    div.innerHTML='<div class="ck on" style="border-color:#7C3AED;">✓</div><div><div style="font-size:15px;font-weight:500;color:#111;">'+emp.nome+'</div><div style="font-size:12px;color:#888;">CNPJ: '+emp.cnpj+'</div></div>';
+    list.appendChild(div);
+  });
+}
+
+function cadastrarEmpresa(){
+  empAdicionadas.forEach(function(emp){
+    var lista=document.getElementById('gestao-lista');
+    var div=document.createElement('div');
+    div.className='cr';
+    div.onclick=function(){goTo('s-dados-emp');};
+    div.innerHTML='<div class="ci" style="background:#fff3f3;">⏰</div><div><div class="cn">'+emp.nome+'</div><div class="cc">'+emp.cnpj+'</div></div><div class="cb2">Cadastro</div><span style="color:#bbb;font-size:20px;">›</span>';
+    lista.appendChild(div);
+  });
+  empAdicionadas=[];
+  document.getElementById('emp-add-list').innerHTML='';
+  document.getElementById('ae-ft').classList.add('hidden');
+  goTo('s-gestao');
+}
+function toggleCk(ckId,declId){const ck=document.getElementById(ckId);ck.classList.toggle('on');const isOn=ck.classList.contains('on');ck.textContent=isOn?'✓':'';ck.style.borderColor=isOn?'#7C3AED':'#ccc';if(ckId==='ck-proc'){document.getElementById('box-info-socio').style.display=isOn?'none':'flex';document.getElementById('box-sel-socio').style.display=isOn?'none':'';document.getElementById('box-procuracao').classList.toggle('hidden',!isOn);}if(declId){document.getElementById(declId).classList.toggle('hidden');}}
 function startTimer(elId,s){if(tmrs[elId])clearInterval(tmrs[elId]);let r=s;const el=document.getElementById(elId);tmrs[elId]=setInterval(()=>{r--;el.textContent=String(Math.floor(r/60)).padStart(2,'0')+':'+String(r%60).padStart(2,'0');if(r<=0)clearInterval(tmrs[elId]);},1000);}
 
 function toggleSocio(key) {
@@ -890,6 +959,43 @@ function abrirSelfie() {
   window.addEventListener('focus', onReturn);
 }
 // Dica: CPF começando com 1 = já cadastrado | OTP correto = 111111
+
+function toggleUpload(el){
+  if(el.classList.contains('uploaded')){
+    el.classList.remove('uploaded');
+    el.innerHTML='<div style="font-size:24px;color:#7C3AED;">↑</div><div style="font-size:14px;font-weight:600;color:#333;margin-top:4px;">Selecionar arquivos</div><p>Formatos aceitos: PDF, PNG ou JPG. Tamanho máximo: 8 MB.</p>';
+  } else {
+    el.classList.add('uploaded');
+    el.innerHTML='<div class="uz-icon">✅</div><div class="uz-info"><div class="uz-name">documento_enviado.pdf</div><div class="uz-meta">PDF · 1,2 MB · Enviado agora</div></div><button class="uz-del" onclick="event.stopPropagation();toggleUpload(this.parentElement)">✕</button>';
+  }
+}
+
+// Atalhos de teclado: = avança | - retrocede
+(function(){
+  var screens = [
+    's-cpf','s-senha','s-dados','s-otp-email','s-otp-cel','s-doc',
+    's-perm','s-cam-f','s-rev-f','s-cam-v','s-rev-v','s-selfie-dicas',
+    's-unico-intro','s-unico-selfie','s-unico-loading','s-unico-pronto',
+    's-unico-verif','s-unico-ok','s-senha-criar','s-loading-emp',
+    's-cadastrar-estab','s-gestao','s-next-cashback','ae-sheet',
+    's-cnpj','s-dados-emp','s-docs-emp','s-banco','s-next','s-menu'
+  ];
+  function currentIndex(){
+    return screens.findIndex(function(id){
+      var el=document.getElementById(id);
+      return el&&el.classList.contains('active');
+    });
+  }
+  document.addEventListener('keydown',function(e){
+    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+    var i=currentIndex();
+    if(e.key==='='||e.key==='+'){
+      if(i<screens.length-1) goTo(screens[i+1]);
+    } else if(e.key==='-'){
+      if(i>0) goTo(screens[i-1]);
+    }
+  });
+})();
 
 
 </script>
