@@ -589,6 +589,10 @@ input[readonly]{background:#f9f9f9;color:#666;}
   <div style="padding:20px 20px 0;flex:1;overflow-y:auto;">
     <div class="bsr" data-maze-id="btn-buscar-cnpj" onclick="goTo('s-cnpj')" style="border-radius:12px;"><span style="font-size:16px;">🔍</span><span>Buscar por CNPJ</span></div>
     <div id="emp-add-list"></div>
+    <button onclick="goTo('s-cnpj')" style="display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;color:#7C3AED;font-size:14px;font-weight:600;padding:14px 4px;width:100%;">
+      <span style="width:28px;height:28px;border-radius:50%;border:2px solid #7C3AED;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;flex-shrink:0;">+</span>
+      Adicionar outro CNPJ
+    </button>
   </div>
   <div class="ft hidden" id="ae-ft"><button class="bp" onclick="cadastrarEmpresa()">Cadastrar empresa</button></div>
 </div>
@@ -898,6 +902,7 @@ function renderEmpAE(){
 }
 
 function cadastrarEmpresa(){
+  var destino = empAdicionadas.length === 1 ? 's-dados-emp' : 's-gestao';
   empAdicionadas.forEach(function(emp){
     var lista=document.getElementById('gestao-lista');
     var div=document.createElement('div');
@@ -909,7 +914,7 @@ function cadastrarEmpresa(){
   empAdicionadas=[];
   document.getElementById('emp-add-list').innerHTML='';
   document.getElementById('ae-ft').classList.add('hidden');
-  goTo('s-gestao');
+  goTo(destino);
 }
 function toggleCk(ckId,declId){const ck=document.getElementById(ckId);ck.classList.toggle('on');const isOn=ck.classList.contains('on');ck.textContent=isOn?'✓':'';ck.style.borderColor=isOn?'#7C3AED':'#ccc';if(ckId==='ck-proc'){document.getElementById('box-info-socio').style.display=isOn?'none':'flex';document.getElementById('box-sel-socio').style.display=isOn?'none':'';document.getElementById('box-procuracao').classList.toggle('hidden',!isOn);}if(declId){document.getElementById(declId).classList.toggle('hidden');}}
 function startTimer(elId,s){if(tmrs[elId])clearInterval(tmrs[elId]);let r=s;const el=document.getElementById(elId);tmrs[elId]=setInterval(()=>{r--;el.textContent=String(Math.floor(r/60)).padStart(2,'0')+':'+String(r%60).padStart(2,'0');if(r<=0)clearInterval(tmrs[elId]);},1000);}
