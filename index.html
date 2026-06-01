@@ -958,34 +958,12 @@ function abrirSelfie() {
   var btn = document.getElementById('btn-selfie');
   btn.disabled = true;
   btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:10px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin .8s linear infinite;"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>Aguardando...</span>';
-
   window.open('https://alexandrelemos-create.github.io/bankly/', '_blank');
-
-  var handled = false;
-  var active = true;
-
-  // Cancela após 5 minutos para não interferir com o Maze
-  var killTimer = setTimeout(function(){
-    active = false;
-    document.removeEventListener('visibilitychange', onReturn);
-    window.removeEventListener('focus', onReturn);
-  }, 300000);
-
-  function onReturn() {
-    if (!active || handled) return;
-    if (document.visibilityState === 'hidden') return;
-    handled = true;
-    active = false;
-    clearTimeout(killTimer);
-    document.removeEventListener('visibilitychange', onReturn);
-    window.removeEventListener('focus', onReturn);
+  function onFocus() {
+    window.removeEventListener('focus', onFocus);
     setTimeout(function() { goTo('s-senha-criar'); }, 600);
   }
-  // Aguarda 1s antes de ouvir o retorno, evitando disparo imediato
-  setTimeout(function(){
-    document.addEventListener('visibilitychange', onReturn);
-    window.addEventListener('focus', onReturn);
-  }, 1000);
+  window.addEventListener('focus', onFocus);
 }
 // Dica: CPF começando com 1 = já cadastrado | OTP correto = 111111
 
